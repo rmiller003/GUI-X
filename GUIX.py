@@ -1,82 +1,56 @@
 # GUI-X is a simple Snake Game written in Python 3
 # By RPM
 
-import turtle
+import pygame
 import time
+pygame.init()
 
-delay = 0.1
+white = (255, 255, 255)
+black = (0, 0, 0)
+red = (255, 0, 0)
+blue = (0, 0, 255)
+
 
 # Set up the screen
-wn = turtle.Screen()
-wn.title("GUI-X Game by RPM")
-wn.bgcolor("green")
-wn.setup(width=600, height=600)
-wn.tracer(0)  # Turns off screen updates
+dis = pygame.display.set_mode((800, 600))
+pygame.display.set_caption("GUI-X Game by RPM")
 
-# Snake head
-head = turtle.Turtle()
-head.speed(0)
-head.shape("square")
-head.color("black")
-head.penup()
-head.goto(0, 0)
-head.direction = "stop"
+game_over = False
 
+x1 = 300
+y1 = 300
 
-# Functions
-def go_up():
-    head.direction = "up"
+x1_change = 0
+y1_change = 0
 
+clock = pygame.time.Clock()
 
-def go_down():
-    head.direction = "down"
+while not game_over:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            game_over = True
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                x1_change = -10
+                y1_change = 0
+            elif event.key == pygame.K_RIGHT:
+                x1_change = 10
+                y1_change = 0
+            elif event.key == pygame.K_UP:
+                y1_change = -10
+                x1_change = 0
+            elif event.key == pygame.K_DOWN:
+                y1_change = 10
+                x1_change = 0
 
+    x1 += x1_change
+    y1 += y1_change
+    dis.fill(black)
+    pygame.draw.rect(dis, blue, [x1, y1, 10, 10])
 
-def go_left():
-    head.direction = "left"
+    pygame.display.update()
 
+    clock.tick(30)
 
-def go_right():
-    head.direction = "right"
-
-
-def move():
-    if head.direction == "up":
-        y = head.ycor()
-        head.sety(y + 20)
-
-
-def move():
-    if head.direction == "down":
-        y = head.ycor()
-        head.sety(y - 20)
-
-
-def move():
-    if head.direction == "left":
-        x = head.xcor()
-        head.setx(x - 20)
-
-
-def move():
-    if head.direction == "right":
-        x = head.xcor()
-        head.setx(x + 20)
-
-
-# Keyboard bindings
-wn.listen()
-wn.onkeypress(go_up, "i")
-wn.onkeypress(go_down, "k")
-wn.onkeypress(go_left, "j")
-wn.onkeypress(go_right, "l")
-
-# Main game loop
-while True:
-    wn.update()
-
-    move()
-
-    time.sleep(delay)
-
-wn.mainloop()
+pygame.quit()
+quit()
